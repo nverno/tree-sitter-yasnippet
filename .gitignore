@@ -8,6 +8,7 @@ tree-sitter-yasnippet.wasm
 .rope*
 .mypy*
 *.so
+/parser
 
 # src/
 # Cargo.toml

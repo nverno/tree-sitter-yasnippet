@@ -7,20 +7,27 @@
   {
     "type": "directive",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "key",
-          "named": true
-        },
-        {
-          "type": "value",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "key",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "value",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -29,7 +36,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "parenthesized_expression",
@@ -99,9 +106,18 @@
         {
           "type": "header_end",
           "named": true
+        },
+        {
+          "type": "local_variables",
+          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "header_end",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "key",
@@ -109,21 +125,54 @@
     "fields": {}
   },
   {
+    "type": "local_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "variable",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "value",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "local_variables",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "local_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "mirror",
     "named": true,
     "fields": {
       "code": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
-          {
-            "type": "$(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
           {
             "type": "elisp_code",
             "named": true
@@ -299,6 +348,14 @@
     "named": false
   },
   {
+    "type": "-*-",
+    "named": false
+  },
+  {
+    "type": "--",
+    "named": false
+  },
+  {
     "type": ":",
     "named": false
   },
@@ -327,10 +384,6 @@
     "named": false
   },
   {
-    "type": "header_end",
-    "named": true
-  },
-  {
     "type": "key",
     "named": false
   },
@@ -352,6 +405,10 @@
   },
   {
     "type": "value",
+    "named": true
+  },
+  {
+    "type": "variable",
     "named": true
   },
   {

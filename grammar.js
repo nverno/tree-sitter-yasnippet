@@ -19,6 +19,8 @@ module.exports = grammar({
     [
       $.escape_sequence,
       $.field,
+      $.mirror,
+      // $._expression,
     ]
   ],
   // name of token matching keywords
@@ -33,24 +35,43 @@ module.exports = grammar({
     ),
 
     header: $ => seq(
+      optional($.local_variables),
       repeat1(choice(
         $.directive,
         $.comment,
       )),
-      alias("# --", $.header_end),
+      $.header_end,
+    ),
+
+    header_end: $ => seq("#", "--"),
+
+    local_definition: $ => seq(
+      field("name", alias(/[^ \t\n\r;:]+/, $.variable)), ':',
+      field("value", alias(/[^ \t\n\r;]+/, $.value)),
+    ),
+
+    local_variables: $ => seq(
+      '#',
+      '-*-',
+      semiSep(
+        repeat($.local_definition)
+      ),
+      '-*-'
     ),
 
     comment: $ => seq(
       '#',
       repeat(/./),
     ),
-    
+
     directive: $ => prec(1, seq(
-      '#', $.key, ':', $.value
+      '#',
+      field("name", $.key), ':',
+      field("value", $.value)
     )),
 
     key: $ => choice(
-      "key",
+      'key',
       'name',
       'condition',
       'contributor',
@@ -58,19 +79,18 @@ module.exports = grammar({
       'expand-env',
       'uuid',
       'group',
-      "type",
+      'type',
     ),
     value: $ => /.+/,
 
-    snippet: $ => prec.right(repeat1(choice(
+    snippet: $ => repeat1(choice(
       $.escape_sequence,
       $.text,
       $.mirror,
       $.field,
       $.string,
       $.number,
-    ))),
-    
+    )),
 
     _expression: $ => choice(
       $.parenthesized_expression,
@@ -78,7 +98,11 @@ module.exports = grammar({
       $.text,
     ),
 
-    parenthesized_expression: $ => seq("(", repeat($._expression), ")"),
+    parenthesized_expression: $ => seq(
+      "(",
+      repeat($._expression),
+      ")"
+    ),
 
     field: $ => choice(
       $._field,
@@ -97,14 +121,20 @@ module.exports = grammar({
     mirror: $ => seq(
       "${",
       field("index", $.number), ":",
+      // XXX: allowed?
       repeat($._expression),
-      field("code",
-        seq("$(", alias(repeat($._expression), $.elisp_code), ")")
-      ),
+      field("code", $.elisp_code),
+      // XXX: allowed?
       repeat($._expression),
       "}",
     ),
-    
+
+    elisp_code: $ => prec(1, seq(
+      "$(",
+      repeat($._expression),
+      ")"
+    )),
+
     escape_sequence: $ => token.immediate(
       seq('\\', choice(
         /\$[({]?/,
@@ -113,7 +143,7 @@ module.exports = grammar({
     ),
 
     string_content: $ => prec.right(repeat1(/[^"\\]/)),
-    
+
     string: $ => seq(
       '"',
       repeat(choice(
@@ -129,6 +159,14 @@ module.exports = grammar({
     // "$(" in escaped fields with mirrors
     text: $ => prec.right(choice("$(", repeat1(/[^ \t\n\r]/))),
 
-    ident: $ => /[a-z][a-z-]+/,
+    ident: $ => /[a-zA-Z-][a-zA-Z0-9-]+/,
   }
 });
+
+function sep1(rule, separator) {
+  return seq(rule, repeat(seq(separator, rule)));
+}
+
+function semiSep(rule) {
+  return optional(sep1(rule, /;+/));
+}
