@@ -62,7 +62,7 @@ module.exports = grammar({
     ),
     value: $ => /.+/,
 
-    snippet: $ => prec.left(repeat1(choice(
+    snippet: $ => prec.right(repeat1(choice(
       $.escape_sequence,
       $.text,
       $.mirror,
@@ -71,6 +71,15 @@ module.exports = grammar({
       $.number,
     ))),
     
+
+    _expression: $ => choice(
+      $.parenthesized_expression,
+      $.string,
+      $.text,
+    ),
+
+    parenthesized_expression: $ => seq("(", repeat($._expression), ")"),
+
     field: $ => choice(
       $._field,
       $._simple_field,
@@ -81,31 +90,21 @@ module.exports = grammar({
     _field: $ => seq(
       "${",
       optional(seq(field("index", $.number), ":")),
-      choice(
-        $.string,
-        $.text,
-      ),
-      token.immediate("}"),
+      repeat($._expression),
+      "}",
     ),
 
     mirror: $ => seq(
       "${",
-      field("index", $.number),
-      token.immediate(":"),
-      "$(", $.code, ")",
-      token.immediate("}"),
+      field("index", $.number), ":",
+      repeat($._expression),
+      field("code",
+        seq("$(", alias(repeat($._expression), $.elisp_code), ")")
+      ),
+      repeat($._expression),
+      "}",
     ),
-
-    _expression: $ => choice(
-      $.string,
-      alias(/[^")(]+/, $.text),
-      $.parenthesized_expression,
-    ),
-
-    parenthesized_expression: $ => seq("(", $._expression, ")"),
-
-    code: $ => repeat1($._expression),
-
+    
     escape_sequence: $ => token.immediate(
       seq('\\', choice(
         /\$[({]?/,
@@ -127,7 +126,8 @@ module.exports = grammar({
 
     number: $ => /\d+/,
 
-    text: $ => prec.right(repeat1(/[^ \t\n\r]/)),
+    // "$(" in escaped fields with mirrors
+    text: $ => prec.right(choice("$(", repeat1(/[^ \t\n\r]/))),
 
     ident: $ => /[a-z][a-z-]+/,
   }
