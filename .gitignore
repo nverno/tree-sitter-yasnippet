@@ -1,0 +1,14 @@
+.log/
+node_modules/
+tmp.*
+build/
+package-lock.json
+libtree-sitter-yasnippet.so
+tree-sitter-yasnippet.wasm
+.rope*
+.mypy*
+*.so
+
+# src/
+# Cargo.toml
+# binding*

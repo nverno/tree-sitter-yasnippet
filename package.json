@@ -1,0 +1,67 @@
+{
+  "name": "tree-sitter-yasnippet",
+  "version": "0.1.0",
+  "description": "Yasnippet grammar for tree-sitter",
+  "keywords": [
+    "parser",
+    "lexer",
+    "yasnippet"
+  ],
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
+  ],
+  "homepage": "https://github.com/nverno/tree-sitter-yasnippet#readme",
+  "bugs": {
+    "url": "https://github.com/nverno/tree-sitter-yasnippet/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nverno/tree-sitter-yasnippet.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": "Noah Peart",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "tree-sitter generate",
+    "build:native": "tree-sitter generate && node-gyp build",
+    "build:wasm": "tree-sitter build-wasm",
+    "install": "node-gyp-build",
+    "parse": "tree-sitter parse",
+    "web": "npm run build:wasm && npx tree-sitter web-ui",
+    "test": "tree-sitter test",
+    "prebuildify": "prebuildify --napi --strip"
+  },
+  "dependencies": {
+    "node-addon-api": "^7.1.0",
+    "node-gyp-build": "^4.8.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "node-gyp": "^10.1.0",
+    "tree-sitter-cli": "^0.22.5",
+    "prebuildify": "^6.0.0"
+  },
+  "gypfile": true,
+  "tree-sitter": [
+    {
+      "scope": "",
+      "file-types": []
+    }
+  ]
+}
