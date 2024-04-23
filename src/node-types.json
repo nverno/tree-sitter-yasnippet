@@ -35,23 +35,20 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": false,
+      "multiple": false,
+      "required": true,
       "types": [
         {
           "type": "parenthesized_expression",
           "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "text",
-          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "escape_sequence",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "field",
@@ -73,7 +70,11 @@
       "required": false,
       "types": [
         {
-          "type": "parenthesized_expression",
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "field",
           "named": true
         },
         {
@@ -195,7 +196,11 @@
       "required": false,
       "types": [
         {
-          "type": "parenthesized_expression",
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "field",
           "named": true
         },
         {
@@ -217,6 +222,14 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
         {
           "type": "parenthesized_expression",
           "named": true
@@ -332,10 +345,6 @@
     "named": false
   },
   {
-    "type": "$(",
-    "named": false
-  },
-  {
     "type": "${",
     "named": false
   },
@@ -360,6 +369,10 @@
     "named": false
   },
   {
+    "type": "\\",
+    "named": false
+  },
+  {
     "type": "binding",
     "named": false
   },
@@ -370,10 +383,6 @@
   {
     "type": "contributor",
     "named": false
-  },
-  {
-    "type": "escape_sequence",
-    "named": true
   },
   {
     "type": "expand-env",

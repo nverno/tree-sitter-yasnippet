@@ -20,7 +20,7 @@ module.exports = grammar({
       $.escape_sequence,
       $.field,
       $.mirror,
-      // $._expression,
+      $.text,
     ]
   ],
   // name of token matching keywords
@@ -93,14 +93,23 @@ module.exports = grammar({
     )),
 
     _expression: $ => choice(
+      $.escape_sequence,
+      $.string,
+      $.field,
+      $.text,
+    ),
+
+    _code_expression: $ => choice(
+      $.escape_sequence,
+      $.text,
       $.parenthesized_expression,
       $.string,
-      $.text,
+      $.number,
     ),
 
     parenthesized_expression: $ => seq(
       "(",
-      repeat($._expression),
+      repeat($._code_expression),
       ")"
     ),
 
@@ -129,18 +138,16 @@ module.exports = grammar({
       "}",
     ),
 
-    elisp_code: $ => prec(1, seq(
-      "$(",
-      repeat($._expression),
-      ")"
+    elisp_code: $ => prec.right(1, seq(
+      "$", $.parenthesized_expression
+      // repeat($._code_expression),
+      // ")"
     )),
 
-    escape_sequence: $ => token.immediate(
-      seq('\\', choice(
-        /\$[({]?/,
-        /[)\\"]/
-      ))
-    ),
+    escape_sequence: $ => seq('\\', choice(
+      /[$][({]?/,
+      /[)\\"{}]/
+    )),
 
     string_content: $ => prec.right(repeat1(/[^"\\]/)),
 
@@ -156,8 +163,8 @@ module.exports = grammar({
 
     number: $ => /\d+/,
 
-    // "$(" in escaped fields with mirrors
-    text: $ => prec.right(choice("$(", repeat1(/[^ \t\n\r]/))),
+    // "$" in escaped fields
+    text: $ => prec.right(-1, choice("$", repeat1(/[^ \t\n\r]/))),
 
     ident: $ => /[a-zA-Z-][a-zA-Z0-9-]+/,
   }

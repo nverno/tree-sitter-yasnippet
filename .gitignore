@@ -1,5 +1,6 @@
 .log/
 node_modules/
+/tree-sitter-elisp
 tmp.*
 build/
 package-lock.json
