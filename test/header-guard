@@ -1,0 +1,14 @@
+# -*- mode: snippet; fill-column: 1; -*-
+# name: header guard
+# key: guard
+# --
+#ifndef ${1:_`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H_}
+#define $1
+
+printf("`yas-selected-text`\n");
+
+for ($2;$3;$4) {
+  `yas-selected-text`$0
+}
+
+#endif /* $1 */

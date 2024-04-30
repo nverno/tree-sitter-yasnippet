@@ -1,5 +1,33 @@
 [
   {
+    "type": "backquote_expression",
+    "named": true,
+    "fields": {
+      "code": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "comment",
     "named": true,
     "fields": {}
@@ -69,6 +97,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "backquote_expression",
+          "named": true
+        },
         {
           "type": "escape_sequence",
           "named": true
@@ -196,6 +228,10 @@
       "required": false,
       "types": [
         {
+          "type": "backquote_expression",
+          "named": true
+        },
+        {
           "type": "escape_sequence",
           "named": true
         },
@@ -222,10 +258,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "escape_sequence",
-          "named": true
-        },
         {
           "type": "number",
           "named": true
@@ -254,6 +286,10 @@
       "required": true,
       "types": [
         {
+          "type": "backquote_expression",
+          "named": true
+        },
+        {
           "type": "escape_sequence",
           "named": true
         },
@@ -263,10 +299,6 @@
         },
         {
           "type": "mirror",
-          "named": true
-        },
-        {
-          "type": "number",
           "named": true
         },
         {
@@ -307,6 +339,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "backquote_expression",
+          "named": true
+        },
         {
           "type": "escape_sequence",
           "named": true
@@ -370,6 +406,10 @@
   },
   {
     "type": "\\",
+    "named": false
+  },
+  {
+    "type": "`",
     "named": false
   },
   {

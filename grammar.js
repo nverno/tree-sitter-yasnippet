@@ -84,27 +84,35 @@ module.exports = grammar({
     value: $ => /.+/,
 
     snippet: $ => repeat1(choice(
-      $.escape_sequence,
-      $.text,
       $.mirror,
-      $.field,
-      $.string,
-      $.number,
+      $._field_expression,
     )),
 
-    _expression: $ => choice(
+    _simple_expression: $ => choice(
       $.escape_sequence,
       $.string,
-      $.field,
       $.text,
     ),
 
+    // Expressions that can appear in fields
+    _field_expression: $ => choice(
+      $.field,
+      $.backquote_expression,
+      $._simple_expression,
+    ),
+
+    // No fields/backquotes/nested code in code expressions
     _code_expression: $ => choice(
-      $.escape_sequence,
-      $.text,
       $.parenthesized_expression,
-      $.string,
-      $.number,
+      alias($.code_string, $.string),
+      $.text,
+      $.number
+    ),
+
+    backquote_expression: $ => seq(
+      "`",
+      field("code", $._code_expression),
+      "`",
     ),
 
     parenthesized_expression: $ => seq(
@@ -114,16 +122,16 @@ module.exports = grammar({
     ),
 
     field: $ => choice(
-      $._field,
+      $._field_with_default,
       $._simple_field,
     ),
 
     _simple_field: $ => seq("$", field("index", $.number)),
 
-    _field: $ => seq(
+    _field_with_default: $ => seq(
       "${",
       optional(seq(field("index", $.number), ":")),
-      repeat($._expression),
+      repeat($._field_expression),
       "}",
     ),
 
@@ -131,17 +139,15 @@ module.exports = grammar({
       "${",
       field("index", $.number), ":",
       // XXX: allowed?
-      repeat($._expression),
+      repeat($._field_expression),
       field("code", $.elisp_code),
       // XXX: allowed?
-      repeat($._expression),
+      repeat($._field_expression),
       "}",
     ),
 
     elisp_code: $ => prec.right(1, seq(
       "$", $.parenthesized_expression
-      // repeat($._code_expression),
-      // ")"
     )),
 
     escape_sequence: $ => seq('\\', choice(
@@ -151,17 +157,11 @@ module.exports = grammar({
 
     string_content: $ => prec.right(repeat1(/[^"\\]/)),
 
-    string: $ => seq(
-      '"',
-      repeat(choice(
-        $.escape_sequence,
-        $.field,
-        $.string_content,
-      )),
-      token.immediate('"'),
-    ),
+    code_string: $ => str($, []),
 
-    number: $ => /\d+/,
+    string: $ => str($, [$.field, $.backquote_expression]),
+
+    number: $ => token.immediate(/\d+/),
 
     // "$" in escaped fields
     text: $ => prec.right(-1, choice("$", repeat1(/[^ \t\n\r]/))),
@@ -169,6 +169,19 @@ module.exports = grammar({
     ident: $ => /[a-zA-Z-][a-zA-Z0-9-]+/,
   }
 });
+
+function str($, rules = []) {
+  return seq(
+    '"',
+    repeat(choice(
+      $.escape_sequence,
+      $.string_content,
+      alias(/\\["ntr]/, $.escape_sequence),
+      ...rules
+    )),
+    token.immediate('"'),
+  );
+}
 
 function sep1(rule, separator) {
   return seq(rule, repeat(seq(separator, rule)));
