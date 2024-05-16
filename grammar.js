@@ -84,7 +84,7 @@ module.exports = grammar({
     value: $ => /.+/,
 
     snippet: $ => repeat1(choice(
-      $.mirror,
+      // $.mirror,
       $._field_expression,
     )),
 
@@ -99,6 +99,7 @@ module.exports = grammar({
       $.field,
       $.backquote_expression,
       $._simple_expression,
+      $.mirror,
     ),
 
     // No fields/backquotes/nested code in code expressions

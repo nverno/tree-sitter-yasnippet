@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-yasnippet",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Yasnippet grammar for tree-sitter",
   "keywords": [
     "parser",

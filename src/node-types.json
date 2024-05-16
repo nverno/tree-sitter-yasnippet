@@ -110,6 +110,10 @@
           "named": true
         },
         {
+          "type": "mirror",
+          "named": true
+        },
+        {
           "type": "string",
           "named": true
         },
@@ -237,6 +241,10 @@
         },
         {
           "type": "field",
+          "named": true
+        },
+        {
+          "type": "mirror",
           "named": true
         },
         {

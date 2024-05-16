@@ -265,10 +265,6 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "mirror"
-          },
-          {
-            "type": "SYMBOL",
             "name": "_field_expression"
           }
         ]
@@ -305,6 +301,10 @@
         {
           "type": "SYMBOL",
           "name": "_simple_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "mirror"
         }
       ]
     },
