@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: backquotes
+# --
+"`yas-selected-text`\n"`(yas-text)`

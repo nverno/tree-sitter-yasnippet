@@ -1,0 +1,62 @@
+====================================
+Backquotes
+====================================
+
+# -*- mode: snippet -*-
+# name: backquotes
+# --
+"`yas-selected-text`\n"`(yas-text)`
+
+------------------------------------
+
+(source_file
+  (header
+    (local_variables
+      (local_definition
+        name: (variable)
+        value: (value)))
+    (directive
+      name: (key)
+      value: (value))
+    (header_end))
+  (snippet
+    (string
+      (backquote_expression
+        code: (text))
+      (escape_sequence))
+    (backquote_expression
+      code: (parenthesized_expression
+        (text)))))
+
+====================================
+Escaped backquotes
+====================================
+
+# -*- mode: snippet -*-
+# name: colorize
+# key: colorize
+# --
+\`\\x1b[30m\${args.join(' ')}\`
+
+------------------------------------
+
+(source_file
+  (header
+    (local_variables
+      (local_definition
+        name: (variable)
+        value: (value)))
+    (directive
+      name: (key)
+      value: (value))
+    (directive
+      name: (key)
+      value: (value))
+    (header_end))
+  (snippet
+    (escape_sequence)
+    (escape_sequence)
+    (text)
+    (escape_sequence)
+    (text)
+    (escape_sequence)))

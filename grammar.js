@@ -153,7 +153,7 @@ module.exports = grammar({
 
     escape_sequence: $ => seq('\\', choice(
       /[$][({]?/,
-      /[)\\"{}]/
+      /[`)\\"{}]/
     )),
 
     string_content: $ => prec.right(repeat1(/[^"\\]/)),

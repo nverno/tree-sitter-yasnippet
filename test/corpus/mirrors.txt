@@ -1,0 +1,91 @@
+====================================
+Mirrored fields
+====================================
+
+# -*- mode: snippet; -*-
+# name: print!
+# key: pr
+# --
+print!("$1"${1:$(if (string-match-p "{}" yas-text) ", " "")}$2);
+
+------------------------------------
+
+(source_file
+  (header
+    (local_variables
+      (local_definition
+        name: (variable)
+        value: (value)))
+    (directive
+      name: (key)
+      value: (value))
+    (directive
+      name: (key)
+      value: (value))
+    (header_end))
+  (snippet
+    (text)
+    (string
+      (field
+        index: (number)))
+    (mirror
+      index: (number)
+      code: (elisp_code
+        (parenthesized_expression
+          (text)
+          (parenthesized_expression
+            (text)
+            (string
+              (string_content))
+            (text))
+          (string
+            (string_content))
+          (string))))
+    (field
+      index: (number))
+    (text)))
+
+====================================
+Escaped mirrored fields
+====================================
+
+# -*- mode: snippet -*-
+# name: print!
+# key: pr
+# --
+print!("$1"\${1:$(if (string-match-p "{}" (yas-text)) ", " "")}$2);
+
+------------------------------------
+
+(source_file
+  (header
+    (local_variables
+      (local_definition
+        name: (variable)
+        value: (value)))
+    (directive
+      name: (key)
+      value: (value))
+    (directive
+      name: (key)
+      value: (value))
+    (header_end))
+  (snippet
+    (text)
+    (string
+      (field
+        index: (number)))
+    (escape_sequence)
+    (text)
+    (text)
+    (text)
+    (string
+      (string_content))
+    (text)
+    (string
+      (string_content))
+    (string)
+    (text)
+    (field
+      index: (number))
+    (text)))

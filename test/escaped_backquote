@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: colorize
+# key: colorize
+# --
+\`\\x1b[30m\${args.join(' ')}\`
